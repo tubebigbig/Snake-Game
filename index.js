@@ -130,11 +130,9 @@ const snakeGame = (function () {
         tempScore += 100;
         scoreCountEle.textContent = tempScore;
         if (eatFootCount >= 1 && this.speed > 100) {
-          console.log("tempLevel", tempLevel);
           levelCountEle.textContent = tempLevel++;
           this.speed = this.speed - 100;
           eatFootCount = 0;
-          console.log(this.speed);
         }
         this.foodLocation = [];
       }
@@ -164,7 +162,6 @@ const snakeGame = (function () {
           Math.floor(Math.random() * (this.MapRowLen - 2) + 1),
           Math.floor(Math.random() * (this.MapColLen - 2) + 1),
         ];
-        console.log("food", [...this.foodLocation]);
       } while (this.MapList[this.foodLocation[0]][this.foodLocation[1]] !== 0);
       this.MapList[this.foodLocation[0]][this.foodLocation[1]] = 2;
     }
