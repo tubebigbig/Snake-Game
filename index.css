@@ -6,17 +6,150 @@ body {
   width: 100%;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 body {
-  background-color: gray;
+  background-color: #153343;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 #app {
-  min-height: 600px;
-  min-width: 600px;
   height: auto;
   width: auto;
-  background-color: lightgray;
+  background-color: #253343;
+  height: 100%;
+  min-width: 800px;
+  max-width: 800px;
+  display: flex;
+}
+
+#app .playGround {
+  transition: all 1s ease-in-out;
+}
+
+.playGround {
+  width: 70%;
+  height: inherit;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.gameMap {
+  outline: 0.5px solid white;
+  display: inline-block;
+}
+
+.row {
+  height: 30px;
+  display: flex;
+}
+
+.row .col {
+  height: 100%;
+  width: 30px;
+  background-color: #253343;
+}
+
+.row:nth-child(2n) .col:nth-child(2n) {
+  background-color: #1f2835;
+}
+
+.row:nth-child(2n + 1) .col:nth-child(2n + 1) {
+  background-color: #1f2835;
+}
+
+.row .col.wall {
+  background-color: inherit !important;
+}
+
+.row .col.food {
+  background-color: red !important;
+}
+
+.row .col.snake {
+  background-color: #2e8bd3 !important;
+}
+
+.scoreboard {
+  width: 30%;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.scoreboard .totalScore,
+.scoreboard .Level,
+.scoreboard .heightScore {
+  border: 1px solid #333333;
+  background-color: #1f2835;
+  width: 90%;
+  border-radius: 20px;
+  padding: 20px;
+  text-align: center;
+  font-size: 22px;
+  font-family: monospace;
+  margin: 10% 0;
+}
+
+.scoreboard .totalScore > div,
+.scoreboard .Level > div,
+.scoreboard .heightScore > div {
+  background-color: #253343;
+  margin-top: 10px;
+}
+
+.displayNone {
+  opacity: 0;
+  z-index: -1;
+}
+
+.gameOver,
+.gameStart {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  font-size: 50px;
+  font-family: monospace;
+}
+
+.gameOver button,
+.gameStart button {
+  font-size: 55px;
+  font-family: monospace;
+  background-color: #253343;
+  outline: none;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 20px;
+  color: white;
+  opacity: 0.5;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.gameOver button:hover,
+.gameStart button:hover {
+  opacity: 0.9;
+}
+
+.gameOver button:focus,
+.gameStart button:focus {
+  outline: 1px solid blueviolet;
+  opacity: 0.9;
+}
+
+.levelControl {
+  margin-bottom: 40px;
 }

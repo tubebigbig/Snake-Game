@@ -7,23 +7,43 @@
   </head>
   <body>
     <div id="app">
-      <form>
-        <div>
-          <label for="number1">Multiply number 1: </label>
-          <input type="text" id="number1" value="0" />
+      <div class="playGround">
+        <div class="gameMap" id="gameMap"></div>
+      </div>
+      <div class="scoreboard">
+        <div class="heightScore">
+          Highest Score
+          <div id="hScoreCount">0</div>
         </div>
-        <div>
-          <label for="number2">Multiply number 2: </label>
-          <input type="text" id="number2" value="0" />
+        <div class="totalScore">
+          Score
+          <div id="scoreCount">0</div>
         </div>
-      </form>
-
-      <p class="result">Result: 0</p>
+        <div class="Level">
+          Level
+          <div id="levelCount">0</div>
+        </div>
+      </div>
+    </div>
+    <div class="gameOver displayNone">
+      <h1>Game over</h1>
+      <button type="button" onclick="game1.reStart()">Again</button>
+    </div>
+    <div class="gameStart">
+      <h1>Snake Game</h1>
+      <div class="levelControl">
+        Level:
+        <button onclick="reduceLevel()" tabindex="1">-</button>
+        <span id="LevelControll">0</span>
+        <button onclick="plusLevel()" tabindex="2">+</button>
+      </div>
+      <button type="button" onclick="game1.start()" tabindex="3">
+        Start
+      </button>
     </div>
     <script src="./index.js"></script>
     <script>
       const game1 = new snakeGame([20, 20]);
-      // game1.start();
     </script>
   </body>
 </html>
