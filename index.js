@@ -5,6 +5,7 @@ const hScoreCountEle = document.getElementById("hScoreCount");
 const LevelControllEle = document.getElementById("LevelControll");
 const gameOverEle = document.getElementsByClassName("gameOver");
 const gameStartEle = document.getElementsByClassName("gameStart");
+const workerData = new Blob(Array.prototype.map.call(document.querySelectorAll('script[type=\'text\/js-worker\']'), function (oScript) { return oScript.textContent; }),{type: 'text/javascript'});
 
 let LevelControll = 0;
 const snakeGame = (function () {
@@ -34,11 +35,11 @@ const snakeGame = (function () {
   }
 
   snakeGame.prototype.init = function (MapSize) {
-    this.MapColLen = MapSize[1] || 20;
-    this.MapRowLen = MapSize[2] || 20;
+    this.MapColLen = MapSize[0] || 20;
+    this.MapRowLen = MapSize[1] || 20;
     this.MapList = [];
     this.speed = 900;
-    this.direction = Math.floor(Math.random() * 5);
+    this.direction = Math.floor(Math.random() * 4);
     this.SnakePosition = [];
     this.foodLocation = [];
     scoreCountEle.textContent = 0;
@@ -50,7 +51,7 @@ const snakeGame = (function () {
     console.log("config", {
       "this.direction": this.direction,
       "this.MapColLen": this.MapColLen,
-      "this.MapRowLen": this.MapRowLen,
+      "this.MapRowLen": this.MapRowLen
     });
     hScoreCountEle.textContent = temphScore;
     console.log("direction", this.direction);
@@ -98,26 +99,22 @@ const snakeGame = (function () {
       const SnakeHead = [...this.SnakePosition[this.SnakePosition.length - 1]];
       switch (this.direction) {
         case 0:
-          SnakeHead[0]++;
-          this.SnakePosition.push(SnakeHead);
+          SnakeHead[0]--;
           break;
         case 1:
           SnakeHead[1]++;
-          this.SnakePosition.push(SnakeHead);
           break;
         case 2:
-          SnakeHead[0]--;
-          this.SnakePosition.push(SnakeHead);
+          SnakeHead[0]++;
           break;
         case 3:
           SnakeHead[1]--;
-          this.SnakePosition.push(SnakeHead);
           break;
         default:
           SnakeHead[1]--;
-          this.SnakePosition.push(SnakeHead);
           break;
       }
+      this.SnakePosition.push(SnakeHead);
       const snakeHead = this.SnakePosition[this.SnakePosition.length - 1];
       if (
         this.foodLocation.length === 0 ||
@@ -130,7 +127,7 @@ const snakeGame = (function () {
         tempScore += 100;
         scoreCountEle.textContent = tempScore;
         if (eatFootCount >= 1 && this.speed > 100) {
-          levelCountEle.textContent = tempLevel++;
+          levelCountEle.textContent = ++tempLevel;
           this.speed = this.speed - 100;
           eatFootCount = 0;
         }
@@ -160,7 +157,7 @@ const snakeGame = (function () {
       do {
         this.foodLocation = [
           Math.floor(Math.random() * (this.MapRowLen - 2) + 1),
-          Math.floor(Math.random() * (this.MapColLen - 2) + 1),
+          Math.floor(Math.random() * (this.MapColLen - 2) + 1)
         ];
       } while (this.MapList[this.foodLocation[0]][this.foodLocation[1]] !== 0);
       this.MapList[this.foodLocation[0]][this.foodLocation[1]] = 2;
@@ -170,23 +167,29 @@ const snakeGame = (function () {
 
   snakeGame.prototype.initSnake = function () {
     const snakeTail = [
-      Math.floor((Math.random() * this.MapRowLen) / 2) + this.MapRowLen / 4,
-      Math.floor((Math.random() * this.MapColLen) / 2) + this.MapColLen / 4,
+      Math.floor((Math.random() * this.MapRowLen) / 2 + this.MapRowLen / 4),
+      Math.floor((Math.random() * this.MapColLen) / 2 + this.MapColLen / 4)
     ];
     let snakeHead = [...snakeTail];
     let snakeBody = [...snakeTail];
+
+    // check direction
+    if (snakeTail[0] >= this.MapRowLen - 5) this.direction = 0;
+    if (snakeTail[0] <= 4) this.direction = 2;
+    if (snakeTail[1] >= this.MapColLen - 5) this.direction = 3;
+    if (snakeTail[1] <= 4) this.direction = 1;
     switch (this.direction) {
       case 0:
-        snakeBody[0]++;
-        snakeHead[0] += 2;
+        snakeBody[0]--;
+        snakeHead[0] -= 2;
         break;
       case 1:
         snakeBody[1]++;
         snakeHead[1] += 2;
         break;
       case 2:
-        snakeBody[0]--;
-        snakeHead[0] -= 2;
+        snakeBody[0]++;
+        snakeHead[0] += 2;
         break;
       case 3:
         snakeBody[1]--;
@@ -239,16 +242,16 @@ const snakeGame = (function () {
             tempDirection = 3;
             break;
           case 38:
-            if (self.direction === 0) return;
-            tempDirection = 2;
+            if (self.direction === 2) return;
+            tempDirection = 0;
             break;
           case 39:
             if (self.direction === 3) return;
             tempDirection = 1;
             break;
           case 40:
-            if (self.direction === 2) return;
-            tempDirection = 0;
+            if (self.direction === 0) return;
+            tempDirection = 2;
             break;
           default:
             break;
@@ -258,7 +261,7 @@ const snakeGame = (function () {
 
     function initWorker() {
       if (window.Worker) {
-        const myWorker = new Worker("worker.js");
+        const myWorker = new Worker(window.URL.createObjectURL(workerData));
         const intervalFunc = function () {
           const isSnakeAlive = self.refreshMap();
           if (isSnakeAlive) {
@@ -298,3 +301,5 @@ const plusLevel = function () {
   LevelControll++;
   LevelControllEle.textContent = LevelControll;
 };
+
+const game1 = new snakeGame([20, 20]);

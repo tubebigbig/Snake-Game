@@ -1,49 +1,62 @@
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="./index.css" />
-    <title>Snake</title>
-  </head>
-  <body>
-    <div id="app">
-      <div class="playGround">
-        <div class="gameMap" id="gameMap"></div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="./index.css" />
+  <title>Snake</title>
+</head>
+
+<body>
+  <div id="app">
+    <div class="playGround">
+      <div class="gameMap" id="gameMap"></div>
+    </div>
+    <div class="scoreboard">
+      <div class="heightScore">
+        Highest Score
+        <div id="hScoreCount">0</div>
       </div>
-      <div class="scoreboard">
-        <div class="heightScore">
-          Highest Score
-          <div id="hScoreCount">0</div>
-        </div>
-        <div class="totalScore">
-          Score
-          <div id="scoreCount">0</div>
-        </div>
-        <div class="Level">
-          Level
-          <div id="levelCount">0</div>
-        </div>
+      <div class="totalScore">
+        Score
+        <div id="scoreCount">0</div>
+      </div>
+      <div class="Level">
+        Level
+        <div id="levelCount">0</div>
       </div>
     </div>
-    <div class="gameOver displayNone">
-      <h1>Game over</h1>
-      <button type="button" onclick="game1.reStart()">Again</button>
+  </div>
+  <div class="gameOver displayNone">
+    <h1>Game over</h1>
+    <button type="button" onclick="game1.reStart()">Again</button>
+  </div>
+  <div class="gameStart">
+    <h1>Snake Game</h1>
+    <div class="levelControl">
+      Level:
+      <button onclick="reduceLevel()" tabindex="1">-</button>
+      <span id="LevelControll">0</span>
+      <button onclick="plusLevel()" tabindex="2">+</button>
     </div>
-    <div class="gameStart">
-      <h1>Snake Game</h1>
-      <div class="levelControl">
-        Level:
-        <button onclick="reduceLevel()" tabindex="1">-</button>
-        <span id="LevelControll">0</span>
-        <button onclick="plusLevel()" tabindex="2">+</button>
-      </div>
-      <button type="button" onclick="game1.start()" tabindex="3">
-        Start
-      </button>
-    </div>
-    <script src="./index.js"></script>
-    <script>
-      const game1 = new snakeGame([20, 20]);
-    </script>
-  </body>
+    <button type="button" onclick="game1.start()" tabindex="3">
+      Start
+    </button>
+  </div>
+  <script type="text/js-worker">
+    onmessage = function(e) {
+      const data = e.data;
+      let interval;
+      if (data.start) {
+        interval = setTimeout(function() {
+          postMessage(true);
+        }, data.times || 1000);
+      }
+      if (data.stop && interval !== undefined) {
+        clearTimeout(interval);
+      }
+    };
+  </script>
+  <script defer src="./index.js"></script>
+</body>
+
 </html>
